@@ -9,3 +9,14 @@ steps:
   - name: 'gcr.io/cloud-builders/npm'
     id: Build React App
     args: ['run', 'build']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: Deploy to Cloud Run
+    entrypoint: 'gcloud'
+    args:
+      [
+        'run', 'deploy', 'hello-react-app',
+        '--source', '.',
+        '--region', 'us-central1',
+        '--allow-unauthenticated',
+      ]
