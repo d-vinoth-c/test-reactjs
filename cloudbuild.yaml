@@ -1,0 +1,8 @@
+steps:
+  - name: 'gcr.io/cloud-builders/npm'
+    id: Install dependencies
+    args: ['install']
+
+  - name: 'gcr.io/cloud-builders/npm'
+    id: Build React App
+    args: ['run', 'build']
