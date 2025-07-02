@@ -2,21 +2,40 @@ options:
   logging: CLOUD_LOGGING_ONLY
   
 steps:
-  - name: 'gcr.io/cloud-builders/npm'
-    id: Install dependencies
-    args: ['install']
+#  - name: 'gcr.io/cloud-builders/npm'
+#    id: Install dependencies
+#    args: ['install']
+#
+#  - name: 'gcr.io/cloud-builders/npm'
+#    id: Build React App
+#    args: ['run', 'build']
+#
+#  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#    id: Deploy to Cloud Run
+#    entrypoint: 'gcloud'
+#    args:
+#      [
+#        'run', 'deploy', 'test-reactjs',
+#        '--source', '.',
+#        '--region', 'us-central1',
+#        '--allow-unauthenticated',
+#      ]
+  # Step 1: Build Docker image (only locally in Cloud Build VM)
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Build Image
+    args: ['build', '-t', 'simple-react-app', '.']
 
-  - name: 'gcr.io/cloud-builders/npm'
-    id: Build React App
-    args: ['run', 'build']
-
+  # Step 2: Deploy to Cloud Run using local image
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: Deploy to Cloud Run
-    entrypoint: 'gcloud'
+    entrypoint: 'bash'
     args:
-      [
-        'run', 'deploy', 'test-reactjs',
-        '--source', '.',
-        '--region', 'us-central1',
-        '--allow-unauthenticated',
-      ]
+      - '-c'
+      - |
+        gcloud auth configure-docker -q
+        docker tag simple-react-app gcr.io/$PROJECT_ID/simple-react-app
+        gcloud run deploy simple-react-app \
+          --image gcr.io/$PROJECT_ID/simple-react-app \
+          --region us-central1 \
+          --platform managed \
+          --allow-unauthenticated
