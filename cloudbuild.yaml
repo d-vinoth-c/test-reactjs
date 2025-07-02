@@ -40,7 +40,7 @@ steps:
       - '-c'
       - |
         gcloud auth configure-docker -q
-        
+        docker tag simple-react-app gcr.io/$PROJECT_ID/simple-react-app
         gcloud run deploy simple-react-app \
           --image gcr.io/$PROJECT_ID/simple-react-app \
           --region us-central1 \
