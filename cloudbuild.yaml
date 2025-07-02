@@ -26,7 +26,11 @@ steps:
     args: ['build', '-t', 'simple-react-app', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/simple-react-app']
+    id: List Image
+    args: ['ls']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'simple-react-app']
 
   # Step 2: Deploy to Cloud Run using local image
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
