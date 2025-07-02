@@ -40,8 +40,9 @@ steps:
       - '-c'
       - |
         gcloud auth configure-docker -q
+        
         gcloud run deploy simple-react-app \
-          --image simple-react-app \
+          --image gcr.io/$PROJECT_ID/simple-react-app \
           --region us-central1 \
           --platform managed \
           --allow-unauthenticated
