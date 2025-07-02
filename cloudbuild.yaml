@@ -27,7 +27,7 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     id: List Image
-    args: ['ls']
+    args: ['images']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'simple-react-app']
